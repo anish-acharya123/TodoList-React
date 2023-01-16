@@ -16,15 +16,35 @@ const getLocalItems = () => {
 const Todo = () => {
   const [inputData, setInputData] = useState("");
   const [items, setItems] = useState(getLocalItems());
+  const [toggleSubmit, setToggleSubmit] = useState(true);
+  const [editItem, setEditItem] = useState(null);
+
+  //adding new data with proper id
   const addItem = () => {
-    if (inputData) {
-      setItems([...items, inputData]);
+    if (inputData && toggleSubmit) {
+      const allInputData = {
+        id: new Date().getTime().toString(),
+        name: inputData,
+      };
+      setItems([...items, allInputData]);
       setInputData("");
       toast.success("Sucessfully Added", {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 1000,
         theme: "dark",
       });
+    } else if (inputData && !toggleSubmit) {
+      setItems(
+        items.map((elem) => {
+          if (elem.id === editItem) {
+            return { ...elem, name: inputData };
+          }
+          return elem;
+        })
+      );
+      setToggleSubmit(true);
+      setInputData("");
+      setEditItem(null);
     } else {
       toast.warn("sorry! Please Enter Something", {
         position: "top-center",
@@ -34,13 +54,15 @@ const Todo = () => {
     }
   };
 
+  //remove each item
   const removeItems = (id) => {
-    const updateItems = items.filter((elem, ind) => {
-      return ind != id;
+    const updateItems = items.filter((elem) => {
+      return elem.id != id;
     });
     setItems(updateItems);
   };
 
+  //remove all iteam  at once
   const removeAll = () => {
     setItems([]);
   };
@@ -49,6 +71,17 @@ const Todo = () => {
   useEffect(() => {
     localStorage.setItem("Lists", JSON.stringify(items));
   }, [items]);
+
+  //edit items
+  const editItems = (id) => {
+    let newEditItems = items.find((elem) => {
+      return elem.id === id;
+    });
+    setToggleSubmit(false);
+    setInputData(newEditItems.name);
+    setEditItem(id);
+  };
+
   return (
     <>
       <div className="main-div">
@@ -65,22 +98,38 @@ const Todo = () => {
               value={inputData}
               onChange={(e) => setInputData(e.target.value)}
             />
-            <i
-              className="fa fa-plus add-btn"
-              title="Add Items"
-              onClick={addItem}
-            ></i>
+
+            {toggleSubmit ? (
+              <i
+                className="fa fa-plus add-btn"
+                title="Add Items"
+                onClick={addItem}
+              ></i>
+            ) : (
+              <i
+                className="far fa-edit add-btn"
+                title="Edit Items"
+                onClick={addItem}
+              ></i>
+            )}
           </div>
           <div className="showItems">
-            {items.map((curElem, id) => {
+            {items.map((curElem) => {
               return (
-                <div className="eachItem" key={id}>
-                  <h3>{curElem}</h3>
-                  <i
-                    className="far fa-trash-alt add-btn"
-                    title="Remove Items"
-                    onClick={() => removeItems(id)}
-                  ></i>
+                <div className="eachItem" key={curElem.id}>
+                  <h3>{curElem.name}</h3>
+                  <div className="todo-btn">
+                    <i
+                      className="far fa-edit add-btn"
+                      title="Edit Items"
+                      onClick={() => editItems(curElem.id)}
+                    ></i>
+                    <i
+                      className="far fa-trash-alt add-btn"
+                      title="Remove Items"
+                      onClick={() => removeItems(curElem.id)}
+                    ></i>
+                  </div>
                 </div>
               );
             })}
