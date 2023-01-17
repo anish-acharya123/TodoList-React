@@ -312,3 +312,13 @@ textarea {
     font-size: 50%;
   }
 }
+@media only screen and (max-width: 350px) {
+  .description {
+    height: 40rem;
+    width: 40rem;
+    left: 2rem;
+  }
+  html {
+    font-size: 45%;
+  }
+}
