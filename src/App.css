@@ -302,10 +302,13 @@ textarea {
     left: -2rem;
   }
 }
-@media only screen and (max-width: 4800px) {
+@media only screen and (max-width: 480px) {
   .description {
     height: 40rem;
     width: 40rem;
     left: 2rem;
+  }
+  html {
+    font-size: 50%;
   }
 }
