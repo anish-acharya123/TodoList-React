@@ -226,6 +226,7 @@ textarea {
   text-align: left;
   width: 100%;
   color: white !important;
+  font-size: 2rem !important;
 }
 .blur {
   filter: blur(8px);
