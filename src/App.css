@@ -203,6 +203,7 @@ textarea {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white !important;
 }
 
 .no-description {
@@ -221,12 +222,10 @@ textarea {
   border-radius: 1rem;
 }
 
-.description:hover h3 {
-  color: white;
-}
 .description h3 {
   text-align: left;
   width: 100%;
+  color: white !important;
 }
 .blur {
   filter: blur(8px);
